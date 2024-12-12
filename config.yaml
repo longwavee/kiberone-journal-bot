@@ -1,0 +1,11 @@
+bot:
+  token: ""
+  host_addr: "0.0.0.0:8443"
+  webhook_addr: ""
+
+storage:
+  host: "localhost"
+  port: 5432
+  user: ""
+  password: ""
+  db_name: ""
