@@ -35,7 +35,9 @@ func New(config *config.Bot, client *tgbotapi.BotAPI, storage Storager, logger L
 	}
 }
 
-func (b *Bot) Run(pattern string) error {
+func (b *Bot) Run() error {
+	pattern := "/" + b.config.Token
+
 	wh, err := tgbotapi.NewWebhook(b.config.WebhookAddr + pattern)
 	if err != nil {
 		return err

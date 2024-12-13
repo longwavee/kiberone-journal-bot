@@ -30,5 +30,5 @@ func main() {
 	}
 
 	b := bot.New(config.Bot, client, storage, logger)
-	b.Run("/" + config.Bot.Token)
+	b.Run()
 }

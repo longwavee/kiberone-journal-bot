@@ -20,8 +20,7 @@ func (b *Bot) HandleUpdate(update *tgbotapi.Update) {
 func (b *Bot) HandleMessage(update *tgbotapi.Update) {
 	t := update.Message.Text
 	switch {
-	case t == "/start":
-		b.StartMessage(update)
+	case t == "":
 	}
 }
 
