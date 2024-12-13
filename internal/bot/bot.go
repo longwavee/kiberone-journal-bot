@@ -4,11 +4,13 @@ import (
 	"net/http"
 
 	"github.com/longwavee/kiberone-journal-bot/internal/config"
+	"github.com/longwavee/kiberone-journal-bot/internal/model"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 type Storager interface {
+	Worker(id int64) *model.Worker
 }
 
 type Logger interface {
@@ -19,20 +21,27 @@ type Logger interface {
 
 type Bot struct {
 	config *config.Bot
+
 	client *tgbotapi.BotAPI
 
 	storage Storager
 	logger  Logger
 }
 
-func New(config *config.Bot, client *tgbotapi.BotAPI, storage Storager, logger Logger) *Bot {
+func New(config *config.Bot, storage Storager, logger Logger) (*Bot, error) {
+	client, err := tgbotapi.NewBotAPI(config.Token)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Bot{
 		config: config,
+
 		client: client,
 
 		storage: storage,
 		logger:  logger,
-	}
+	}, err
 }
 
 func (b *Bot) Run() error {
@@ -52,7 +61,9 @@ func (b *Bot) Run() error {
 	go http.ListenAndServe(b.config.HostAddr, nil)
 
 	for update := range updates {
-		go b.HandleUpdate(&update)
+		go func() {
+			b.HandleUpdate(&update)
+		}()
 	}
 
 	return nil

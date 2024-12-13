@@ -7,28 +7,27 @@ import (
 	"github.com/longwavee/kiberone-journal-bot/internal/config"
 	"github.com/longwavee/kiberone-journal-bot/internal/pkg/logger/zerolog"
 	"github.com/longwavee/kiberone-journal-bot/internal/pkg/storage/postgres"
-
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func main() {
 	config := config.MustLoad()
 
-	client, err := tgbotapi.NewBotAPI(config.Bot.Token)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	storage, err := postgres.New(config.Storage)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to create storage: %v", err)
 	}
 
 	logger, err := zerolog.New()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to create logger: %v", err)
 	}
 
-	b := bot.New(config.Bot, client, storage, logger)
-	b.Run()
+	b, err := bot.New(config.Bot, storage, logger)
+	if err != nil {
+		log.Fatalf("failed to create bot instance: %v", err)
+	}
+
+	if err := b.Run(); err != nil {
+		log.Fatalf("error running the bot: %v", err)
+	}
 }
