@@ -6,23 +6,22 @@ import (
 	"github.com/longwavee/kiberone-journal-bot/internal/bot"
 	"github.com/longwavee/kiberone-journal-bot/internal/config"
 	"github.com/longwavee/kiberone-journal-bot/internal/pkg/logger/zerolog"
-	"github.com/longwavee/kiberone-journal-bot/internal/pkg/storage/postgres"
 )
 
 func main() {
 	config := config.MustLoad()
 
-	storage, err := postgres.New(config.Storage)
-	if err != nil {
-		log.Fatalf("failed to create storage: %v", err)
-	}
+	// storage, err := postgres.New(config.Storage)
+	// if err != nil {
+	// 	log.Fatalf("failed to create storage: %v", err)
+	// }
 
 	logger, err := zerolog.New()
 	if err != nil {
 		log.Fatalf("failed to create logger: %v", err)
 	}
 
-	b, err := bot.New(config.Bot, storage, logger)
+	b, err := bot.New(config.Bot, nil, logger)
 	if err != nil {
 		log.Fatalf("failed to create bot instance: %v", err)
 	}

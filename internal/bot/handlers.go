@@ -20,13 +20,15 @@ func (b *Bot) HandleUpdate(update *tgbotapi.Update) {
 func (b *Bot) HandleMessage(update *tgbotapi.Update) {
 	t := update.Message.Text
 	switch {
-	case t == "":
+	case t == "профиль":
+		b.HandleProfile(update)
 	}
 }
 
 func (b *Bot) HandleCallback(update *tgbotapi.Update) {
 	d := update.CallbackQuery.Data
 	switch {
-	case d == "":
+	case d == "callback_shift_data":
+		b.HandleCallbackProfile(update)
 	}
 }

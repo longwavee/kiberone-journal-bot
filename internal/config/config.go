@@ -27,7 +27,7 @@ type Storage struct {
 }
 
 func MustLoad() *Config {
-	file, err := os.Open("config.yaml")
+	file, err := os.Open("internal/config/config.yaml")
 	if err != nil {
 		log.Fatalf("failed to open config file: %v", err)
 	}
